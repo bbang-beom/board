@@ -47,7 +47,7 @@ public class BoardController {
 				}
 				boardDTO.setName(boardData.getName());
 				if (boardData.getTitle().trim().equals("")) { // 제목에 공백은 불가능
-					view.wrtieTitle();
+					view.wrtieTitleFail();
 					continue;
 				} else { // 입력한 내용들 저장
 					boardDTO.setTitle(boardData.getTitle());
@@ -139,7 +139,7 @@ public class BoardController {
 					}else if(option == 1) {   // 제목 변경
 						String title = view.change();  // 변경할 제목 입력
 						if(title.trim().equals("")) {  // 변경할 제목도 공백은 불가
-							view.wrtieTitle();
+							view.wrtieTitleFail();
 							continue;
 						} else {   // 공백이 아니면
 							boardDTO.setTitle(title); 

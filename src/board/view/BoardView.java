@@ -113,7 +113,7 @@ public class BoardView {
 		System.out.println("작성 실패");
 	}
 	// 제목 공백 불가 안내
-	public void wrtieTitle() {
+	public void wrtieTitleFail() {
 		System.out.println("제목은 공백이 불가능합니다.");
 	}
 	// 삭제 완료 안내

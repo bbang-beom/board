@@ -61,7 +61,7 @@ public class BoardDTO {
 
 	@Override
 	public String toString() {
-		return "BoardDTO [번호:" + index + ", 작성자:" + name + ", 제목:" + title + ", 내용:" + content
-				+ ", 추천 수:" + recommendation + ", 조회 수:" + viewCount + "]";
+		return "[번호:" + index + ", 작성자:" + name + ", 제목:" + title + ", 내용:" + content
+				+ ", 조회 수:" + viewCount +  ", 추천 수:" + recommendation + "]";
 	}
 }
