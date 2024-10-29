@@ -29,7 +29,69 @@ public class BoardDAO {
 	
 	// List 목록 get
 	public ArrayList<BoardDTO> getList(BoardDTO boardDTO) {
-		
 		return this.boardDatas;
+	}
+	// 게시물 선택
+	public BoardDTO selectBoard(BoardDTO boardDTO) {
+		for(BoardDTO data: this.boardDatas) {
+			if(data.getIndex() == boardDTO.getIndex()) {
+				data.setViewCount(data.getViewCount() + 1);   // 조회 시 조회수 1 증가
+				return data;
+			}
+		}
+		return null;
+	}
+	// 게시글 찾기
+	public boolean findBoard(BoardDTO boardDTO) {
+		for(BoardDTO data: this.boardDatas) {
+			if(data.getIndex() == boardDTO.getIndex()) {   // 조회 시 조회수 1 증가
+				return true;
+			}
+		}
+		return false;
+	}
+	// 추천 수 증가
+	public BoardDTO increaseRecommendation(BoardDTO boardDTO) {
+		for(BoardDTO data: this.boardDatas) {
+			if(data.getIndex() == boardDTO.getIndex()) {
+				data.setRecommendation(data.getRecommendation() + 1);   // 조회 시 조회수 1 증가
+				return data;
+			}
+		}
+		return null;
+	}
+	// 추천 수 감소
+	public BoardDTO decreaseRecommendation(BoardDTO boardDTO) {
+		for(BoardDTO data: this.boardDatas) {
+			if(data.getIndex() == boardDTO.getIndex()) {
+				data.setRecommendation(data.getRecommendation() -1);   // 조회 시 조회수 1 증가
+				return data;
+			}
+		}
+		return null;
+	}
+	// 제목 수정
+	public void updateTitle(BoardDTO boardDTO) {
+		for(BoardDTO data: this.boardDatas) {
+			if(data.getIndex() == boardDTO.getIndex()) {
+				data.setTitle(boardDTO.getTitle());
+			}
+		}
+	}
+	// 내용 수정
+	public void updateContent(BoardDTO boardDTO) {
+		for(BoardDTO data: this.boardDatas) {
+			if(data.getIndex() == boardDTO.getIndex()) {
+				data.setContent(boardDTO.getContent());
+			}
+		}
+	}
+	// 게시글 삭제
+	public void deleteBoard(BoardDTO boardDTO) {
+		for(int i = 0; i <this.boardDatas.size(); i++) {
+			if(boardDatas.get(i).getIndex() == boardDTO.getIndex()) {
+				boardDatas.remove(i);
+			}
+		}
 	}
 }

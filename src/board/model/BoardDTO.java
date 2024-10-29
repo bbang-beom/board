@@ -1,14 +1,14 @@
 package board.model;
 
 //model(data)
-//index, name, title, content, count 데이터를 가진다.
+//index, name, title, content, viewCount, recommendation 데이터를 가진다.
 public class BoardDTO {
 	private int index; // 게시물 번호
 	private String name; // 작성자 이름
 	private String title; // 게시물 제목
 	private String content; // 게시물 내용
 	private int recommendation; // 추천 수
-	private int viewCount;
+	private int viewCount;  // 조회 수
 
 	// Getter and Setter
 	public int getIndex() {
@@ -61,7 +61,7 @@ public class BoardDTO {
 
 	@Override
 	public String toString() {
-		return "BoardDTO [index=" + index + ", name=" + name + ", title=" + title + ", content=" + content
-				+ ", recommendation=" + recommendation + ", viewCount=" + viewCount + "]";
+		return "BoardDTO [번호:" + index + ", 작성자:" + name + ", 제목:" + title + ", 내용:" + content
+				+ ", 추천 수:" + recommendation + ", 조회 수:" + viewCount + "]";
 	}
 }
