@@ -1,11 +1,23 @@
 package board.model;
 
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 //model(function)
 //DTO의 data들이 수행할 기능
 public class BoardDAO {
 	private ArrayList<BoardDTO> boardDatas; // 게시판 목록을 저장할 ArrayList
+	public static final String FILEPATH = "boardfile.txt";
 
 	public BoardDAO() {
 		this.boardDatas = new ArrayList<BoardDTO>();
@@ -86,6 +98,7 @@ public class BoardDAO {
 			}
 		}
 	}
+
 	// 게시글 삭제
 	public void deleteBoard(BoardDTO boardDTO) {
 		for(int i = 0; i <this.boardDatas.size(); i++) {
@@ -93,5 +106,51 @@ public class BoardDAO {
 				boardDatas.remove(i);
 			}
 		}
+	}
+	// 파일 저장
+	public boolean saveFile(){
+		try(OutputStream out = new FileOutputStream(FILEPATH);   // 경로는 fileboard.text 고정
+			ObjectOutputStream oOut = new ObjectOutputStream(out);) {
+			oOut.writeObject(this.boardDatas);					// 파일 쓰기
+		}catch(FileNotFoundException e) {
+			return false;				// 예외 발생 시 false
+		}catch(IOException e) {
+			return false;
+		}
+		return true;
+	}
+	// 파일 불러오기
+	@SuppressWarnings("unchecked")
+	public boolean readFile() {
+		try(InputStream in = new FileInputStream(FILEPATH);		// 경로는 fileboard.text 고정
+				ObjectInputStream oIn = new ObjectInputStream(in);) {			
+			this.boardDatas = (ArrayList<BoardDTO>)oIn.readObject();	// 파일 불러오기
+			}catch(ClassNotFoundException e) {
+				return false;			// 예외 발생 시 false
+			}catch(IOException e) {
+				return false;
+			}
+			return true;
+		}
+	// 고유 index 지정
+	public int isIndex(int index) {
+		for(BoardDTO b: boardDatas) {
+			if(b.getIndex() == index) {  // index가 이미 있으면
+				index++;				 // index 증가
+			}
+		}
+		return index;
+	}
+	// 추천 순 정렬
+	public ArrayList<BoardDTO> sortReccomendation(BoardDTO boardDTO) {
+		ArrayList<BoardDTO> sortRecommend = new ArrayList<BoardDTO>(this.boardDatas); // 생성자를 이용한 deep copy
+		Collections.sort(sortRecommend, Comparator.comparing(BoardDTO::getRecommendation).reversed());  // 추천 순을 기준으로 내림차순 정렬
+		return sortRecommend;
+	}
+	// 조회 순 정렬
+	public ArrayList<BoardDTO> sortViewCount(BoardDTO boardDTO) {
+		ArrayList<BoardDTO> sortRecommend = new ArrayList<BoardDTO>(this.boardDatas); // 생성자를 이용한 deep copy
+		Collections.sort(sortRecommend, Comparator.comparing(BoardDTO::getViewCount).reversed()); // 조회 순을 기준으로 내림차순 정렬
+		return sortRecommend;
 	}
 }

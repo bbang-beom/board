@@ -1,8 +1,11 @@
 package board.model;
 
+import java.io.Serializable;
+
 //model(data)
 //index, name, title, content, viewCount, recommendation 데이터를 가진다.
-public class BoardDTO {
+public class BoardDTO implements Serializable{
+	private static final long serialVersionUID = 8197948096836830848L;
 	private int index; // 게시물 번호
 	private String name; // 작성자 이름
 	private String title; // 게시물 제목
