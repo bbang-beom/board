@@ -1,5 +1,6 @@
 package board.view;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,13 +10,14 @@ import board.model.BoardDTO;
 //사용자에게 보여줄 화면을 작성
 public class BoardView {
 	private Scanner scanner = new Scanner(System.in);
+	private SimpleDateFormat date = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss"); // 날짜 포멧 변경
 
 	// 사용자에게 보여줄 메뉴
 	public void displayMenu() {
-		System.out.println("\t\t\t\t\t\t   게시판 Menu");
-		System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
-		System.out.println("| 0. 종료 | 1. 게시물 작성 | 2. 게시물 목록 | 3. 게시물 내용 보기 | 4. 게시물 수정 | 5. 게시물 삭제 | 6. 조회 순 정렬 | 7. 추천 순 정렬 | 8. 파일 저장 |");
-		System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
+		System.out.println("\t\t\t\t\t\t\t   게시판 Menu");
+		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.println("| 0. 종료 | 1. 게시물 작성 | 2. 게시물 목록 | 3. 게시물 내용 보기 | 4. 게시물 수정 | 5. 게시물 삭제 | 6. 조회 순 정렬 | 7. 추천 순 정렬 | | 8. 최신 순 정렬 | 9. 파일 저장 |");
+		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
 	}
 	// 메뉴 선택
 	public int getMenu() {
@@ -47,6 +49,12 @@ public class BoardView {
 
 		return boardData;
 	}
+	
+	// 작성한 data 출력
+	public void printData(BoardDTO boardDTO) {
+		System.out.println(boardDTO);
+	}
+	
 
 	// 선택 범위 초과 에러 메시지
 	public void menuOver() {
@@ -65,21 +73,21 @@ public class BoardView {
 				int option = Integer.parseInt(scanner.nextLine());
 				if (option == 1) {      			// 전체 보기
 					System.out.println("\t게시물 목록");
-					System.out.println("| 번호\t| 작성자\t| 제목\t| 조회수\t|");
+					System.out.println("| 번호\t| 작성자\t| 제목\t| 조회수\t| 작성 일시\t\t|");
 					for (BoardDTO data : datas) {
 						System.out.println("| " + data.getIndex() + "\t| " + data.getName() + "\t| " + data.getTitle() + "\t| " 
-								+ data.getViewCount() + "\t|");
+								+ data.getViewCount() + "\t|" + date.format(data.getDate()) + "\t|");
 					}
 				} else if(option == 2) { 			// 검색어로 보기
 					boolean flag = false;
 					System.out.print("검색어 입력: ");
 					String search = scanner.nextLine();  // 검색어를 입력받고
 					System.out.println(search + "(으)로 검색한 게시물 목록");
-					System.out.println("| 번호\t| 작성자\t| 제목\t| 조회수\t|");
+					System.out.println("| 번호\t| 작성자\t| 제목\t| 조회수\t| 작성 일시\t\t|");
 					for (BoardDTO data : datas) {			// 리스트를 돌면서
 						if(data.getTitle().contains(search)) {	// 검색어가 포함된 게시물만 출력		
 							System.out.println("| " + data.getIndex() + "\t| " + data.getName() + "\t| " + data.getTitle() + "\t| " 
-								+ data.getViewCount() + "\t|");
+								+ data.getViewCount() + "\t|" + date.format(data.getDate()) + "\t|");
 							flag = true;
 						}
 					}
@@ -97,9 +105,9 @@ public class BoardView {
 	// 내용 출력
 	public void displayContent(BoardDTO boardData) {
 		if(boardData != null) {
-		System.out.println("| 번호\t| 작성자\t| 제목\t| 내용\t| 조회수\t|");
+		System.out.println("| 번호\t| 작성자\t| 제목\t| 내용\t| 조회수\t| 작성 일시\t\t|");
 		System.out.println("| " + boardData.getIndex() + "\t| " + boardData.getName() +  "\t| " + boardData.getTitle() + "\t| "
-							+ boardData.getContent() + "\t| " + boardData.getViewCount() + "\t|");
+							+ boardData.getContent() + "\t| " + boardData.getViewCount() + "\t|" + date.format(boardData.getDate()) + "\t|");
 		} else {
 			notExist();
 		}
@@ -159,27 +167,44 @@ public class BoardView {
 	public void loadFileFail() {
 		System.out.println("파일을 가져올 수 없습니다.");
 	}
+	// 파일 출력 완료
+	public void loadFileOK() {
+		System.out.println("파일을 볼러옵니다.");
+	}
 	// 파일 저장 실패
 	public void saveFileFail() {
 		System.out.println("파일 저장 실패");
+	}
+	// 파일 저장 완료
+	public void saveFileOK() {
+		System.out.println("파일 저장 완료");
 	}
 	
 	// 정렬 출력(조회 순)
 	public void viewRecommendSort(ArrayList<BoardDTO> datas) {
 		System.out.println("\t게시물 목록(추천 순)");
-		System.out.println("| 번호\t| 작성자\t| 제목\t| 조회 수\t| 추천 수 |");
+		System.out.println("| 번호\t| 작성자\t| 제목\t| 조회 수\t| 추천 수\t| 작성 일시\t\t|");
 		for (BoardDTO data : datas) {
 			System.out.println("| " + data.getIndex() + "\t| " + data.getName() + "\t| " + data.getTitle() + "\t| " 
-					+ data.getViewCount() + "\t| " + data.getRecommendation() + " |");
+					+ data.getViewCount() + "\t| " + data.getRecommendation() + "\t|" + date.format(data.getDate()) + "\t|");
 		}
 	}
 	// 정렬 출력(추천 순)
 	public void viewViewCountSort(ArrayList<BoardDTO> datas) {
 		System.out.println("\t게시물 목록(조회 순)");
-		System.out.println("| 번호\t| 작성자\t| 제목\t| 조회 수\t| 추천 수 |");
+		System.out.println("| 번호\t| 작성자\t| 제목\t| 조회 수\t| 추천 수\t| 작성 일시\t\t|");
 		for (BoardDTO data : datas) {
 			System.out.println("| " + data.getIndex() + "\t| " + data.getName() + "\t| " + data.getTitle() + "\t| " 
-					+ data.getViewCount() + "\t| " + data.getRecommendation() + " |");
+					+ data.getViewCount() + "\t| " + data.getRecommendation() + "\t|" + date.format(data.getDate()) + "\t|");
+		}
+	}
+	// 정렬 출력(시간 순)
+	public void viewDateSort(ArrayList<BoardDTO> datas) {
+		System.out.println("\t게시물 목록(최신 순)");
+		System.out.println("| 번호\t| 작성자\t| 제목\t| 조회 수\t| 추천 수\t| 작성 일시\t\t|");
+		for (BoardDTO data : datas) {
+			System.out.println("| " + data.getIndex() + "\t| " + data.getName() + "\t| " + data.getTitle() + "\t| " 
+					+ data.getViewCount() + "\t| " + data.getRecommendation() + "\t|" + date.format(data.getDate()) + "\t|");
 		}
 	}
 }

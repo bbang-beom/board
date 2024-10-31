@@ -1,6 +1,8 @@
 package board.controller;
 
+import java.util.Date;
 import java.util.Scanner;
+
 import board.model.BoardDAO;
 import board.model.BoardDTO;
 import board.view.BoardView;
@@ -21,11 +23,13 @@ public class BoardController {
 
 	// 사용자가 프로그램 실행
 	public void appStart() {
-		int choice;
-		dao.readFile(); // 파일 load
-		if (dao.readFile() == false) {
+		boolean fileLoad = dao.readFile(); // 파일 load
+		if(fileLoad == false) {
 			view.loadFileFail(); // 파일 load 실패 메시지
+		}else {
+			view.loadFileOK();
 		}
+		int choice;
 		while (true) {
 			view.displayMenu(); // 시작화면
 			try {
@@ -56,6 +60,7 @@ public class BoardController {
 					boardDTO.setTitle(boardData.getTitle());
 					boardDTO.setContent(boardData.getContent());
 					boardDTO.setIndex(dao.isIndex(INDEX)); // 파일 load 시 생성된 index들과 겹치지 않게 index 저장
+					boardDTO.setDate(new Date());
 				}
 
 				boolean flag = dao.create(boardDTO); // 게시판에 작성
@@ -64,7 +69,7 @@ public class BoardController {
 				} else {
 					view.writeFail();  // 작성 실패
 				}
-				System.out.println(boardDTO); // 생성한 게시글 출력
+				view.printData(boardDTO); // 생성한 게시글 출력
 			}
 			// 읽기
 			case 2 -> {
@@ -184,11 +189,18 @@ public class BoardController {
 				BoardDTO boardDTO = new BoardDTO();
 				view.viewRecommendSort(dao.sortReccomendation(boardDTO));	// 정렬한 list 출력
 			}
-			// 파일 저장
+			// 최신 순 정렬
 			case 8 -> {
-				dao.saveFile();
-				if (dao.saveFile() == false) {
+				BoardDTO boardDTO = new BoardDTO();
+				view.viewDateSort(dao.sortDate(boardDTO));	// 정렬한 list 출력
+			}
+			// 파일 저장
+			case 9 -> {
+				boolean fileSave = dao.saveFile();
+				if (fileSave == false) {
 					view.saveFileFail(); // 파일 save 실패 메시지
+				} else {
+					view.saveFileOK();
 				}
 			}
 

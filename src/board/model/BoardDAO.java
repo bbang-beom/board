@@ -12,12 +12,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 //model(function)
 //DTO의 data들이 수행할 기능
 public class BoardDAO {
 	private ArrayList<BoardDTO> boardDatas; // 게시판 목록을 저장할 ArrayList
-	public static final String FILEPATH = "boardfile.txt";
+	public static final String FILEPATH = "boardfile.txt"; // file을 불러오거나 저장할 경로
 
 	public BoardDAO() {
 		this.boardDatas = new ArrayList<BoardDTO>();
@@ -33,12 +34,13 @@ public class BoardDAO {
 		data.setContent(boardDTO.getContent());
 		data.setRecommendation(0);
 		data.setViewCount(0);
-		// 게시글 생성
+		data.setDate(boardDTO.getDate());
+		// 게시글 추가
 		this.boardDatas.add(data);
 
 		return true;
 	}
-	
+
 	// List 목록 get
 	public ArrayList<BoardDTO> getList(BoardDTO boardDTO) {
 		return this.boardDatas;
@@ -87,6 +89,7 @@ public class BoardDAO {
 		for(BoardDTO data: this.boardDatas) {
 			if(data.getIndex() == boardDTO.getIndex()) {
 				data.setTitle(boardDTO.getTitle());
+				data.setDate(new Date());      // 게시글 수정 시 시간도 자동으로 수정
 			}
 		}
 	}
@@ -95,6 +98,7 @@ public class BoardDAO {
 		for(BoardDTO data: this.boardDatas) {
 			if(data.getIndex() == boardDTO.getIndex()) {
 				data.setContent(boardDTO.getContent());
+				data.setDate(new Date()); // 게시글 수정 시 시간도 자동으로 수정
 			}
 		}
 	}
@@ -153,4 +157,11 @@ public class BoardDAO {
 		Collections.sort(sortRecommend, Comparator.comparing(BoardDTO::getViewCount).reversed()); // 조회 순을 기준으로 내림차순 정렬
 		return sortRecommend;
 	}
+	// 시간 순 정렬
+	public ArrayList<BoardDTO> sortDate(BoardDTO boardDTO) {
+		ArrayList<BoardDTO> sortDate = new ArrayList<BoardDTO>(this.boardDatas); // 생성자를 이용한 deep copy
+		Collections.sort(sortDate, Comparator.comparing(BoardDTO::getDate).reversed()); // 시간 순을 기준으로 정렬
+		return sortDate;
+	}
+	
 }
