@@ -8,7 +8,7 @@ import board.model.BoardDTO;
 import board.view.BoardView;
 
 // controller
-// model의 동작을 제어, 관리 
+// model의 동작을 제어, 관리
 public class BoardController {
 	private BoardView view;
 	private BoardDAO dao;
@@ -24,9 +24,9 @@ public class BoardController {
 	// 사용자가 프로그램 실행
 	public void appStart() {
 		boolean fileLoad = dao.readFile(); // 파일 load
-		if(fileLoad == false) {
+		if (fileLoad == false) {
 			view.loadFileFail(); // 파일 load 실패 메시지
-		}else {
+		} else {
 			view.loadFileOK();
 		}
 		int choice;
@@ -42,6 +42,7 @@ public class BoardController {
 			// 종료
 			case 0 -> {
 				view.exit(); // 종료 메시지
+				scanner.close();
 				return;
 			}
 			// 생성
@@ -65,9 +66,9 @@ public class BoardController {
 
 				boolean flag = dao.create(boardDTO); // 게시판에 작성
 				if (flag) {
-					view.writeOK();   // 작성 성공
+					view.writeOK(); // 작성 성공
 				} else {
-					view.writeFail();  // 작성 실패
+					view.writeFail(); // 작성 실패
 				}
 				view.printData(boardDTO); // 생성한 게시글 출력
 			}
@@ -80,7 +81,7 @@ public class BoardController {
 			case 3 -> {
 				int index;
 				try {
-					index = view.getBoardIndex();	// 출력할 게시글 번호 입력
+					index = view.getBoardIndex(); // 출력할 게시글 번호 입력
 				} catch (NumberFormatException e) { // 사용자가 숫자를 입력하지 않았을 때(올바른 입력을 하지 않았을 때) 예외처리
 					view.menuOver(); // 안내 메시지 출력
 					continue;
@@ -98,7 +99,7 @@ public class BoardController {
 				if (flag) {
 					int recommendation;
 					try {
-						recommendation = view.getRecommend();    // 추천 여부
+						recommendation = view.getRecommend(); // 추천 여부
 					} catch (NumberFormatException e) {
 						view.menuOver();
 						continue;
@@ -120,7 +121,7 @@ public class BoardController {
 			case 4 -> {
 				int index;
 				try {
-					index = view.getBoardIndex();	// 수정할 게시글 번호 입력
+					index = view.getBoardIndex(); // 수정할 게시글 번호 입력
 				} catch (NumberFormatException e) { // 사용자가 숫자를 입력하지 않았을 때(올바른 입력을 하지 않았을 때) 예외처리
 					view.menuOver(); // 안내 메시지 출력
 					continue;
@@ -131,7 +132,7 @@ public class BoardController {
 				if (flag) {
 					int option;
 					try {
-						option = view.getOption();		// 옵션 입력
+						option = view.getOption(); // 옵션 입력
 					} catch (NumberFormatException e) { // 사용자가 숫자를 입력하지 않았을 때(올바른 입력을 하지 않았을 때) 예외처리
 						view.menuOver(); // 안내 메시지 출력
 						continue;
@@ -157,7 +158,7 @@ public class BoardController {
 						view.menuOver();
 					}
 				} else {
-					view.notExist();    // 게시물 없음 안내 메시지
+					view.notExist(); // 게시물 없음 안내 메시지
 				}
 			}
 			// 게시물 삭제
@@ -182,17 +183,17 @@ public class BoardController {
 			// 조회 순 정렬
 			case 6 -> {
 				BoardDTO boardDTO = new BoardDTO();
-				view.viewViewCountSort(dao.sortViewCount(boardDTO)); 		// 정렬한 list 출력
+				view.viewViewCountSort(dao.sortViewCount(boardDTO)); // 정렬한 list 출력
 			}
 			// 추천 순 정렬
 			case 7 -> {
 				BoardDTO boardDTO = new BoardDTO();
-				view.viewRecommendSort(dao.sortReccomendation(boardDTO));	// 정렬한 list 출력
+				view.viewRecommendSort(dao.sortReccomendation(boardDTO)); // 정렬한 list 출력
 			}
 			// 최신 순 정렬
 			case 8 -> {
 				BoardDTO boardDTO = new BoardDTO();
-				view.viewDateSort(dao.sortDate(boardDTO));	// 정렬한 list 출력
+				view.viewDateSort(dao.sortDate(boardDTO)); // 정렬한 list 출력
 			}
 			// 파일 저장
 			case 9 -> {
