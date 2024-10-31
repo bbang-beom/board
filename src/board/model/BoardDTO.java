@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 //model(data)
-//index, name, title, content, viewCount, recommendation 데이터를 가진다.
+//index, name, title, content, viewCount, recommendation, date 데이터를 가진다.
 public class BoardDTO implements Serializable{
 	private static final long serialVersionUID = 8197948096836830848L;
 	private int index; // 게시물 번호
